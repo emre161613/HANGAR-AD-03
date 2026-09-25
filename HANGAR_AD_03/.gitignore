@@ -6,3 +6,4 @@ assets/audio/sfx/*
 !assets/audio/sfx/.gitkeep
 assets/audio/music/*
 !assets/audio/music/.gitkeep
+dl/

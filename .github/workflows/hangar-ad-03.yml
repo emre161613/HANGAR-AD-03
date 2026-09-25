@@ -1,0 +1,46 @@
+name: HANGAR_AD_03
+
+# Runs when HANGAR_AD_03/config/ci_job.json changes on this branch.
+#   {"job": "fetch"}  download stock candidates, commit contact sheets to HANGAR_AD_03/review/
+on:
+  push:
+    branches: [claude/hangar-ad-02-film-rx63m4]
+    paths:
+      - HANGAR_AD_03/config/ci_job.json
+      - .github/workflows/hangar-ad-03.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hangar-ad-03
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: HANGAR_AD_03
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core >/dev/null
+          ffmpeg -hide_banner -version | head -1
+      - name: Job
+        id: job
+        run: echo "job=$(node -p "require('./config/ci_job.json').job")" >> "$GITHUB_OUTPUT"
+      - name: Fetch candidates
+        if: steps.job.outputs.job == 'fetch'
+        run: bash tools/ci_fetch.sh
+      - name: Commit review
+        if: steps.job.outputs.job == 'fetch'
+        run: |
+          git config user.name "hangar-ci"
+          git config user.email "hangar-ci@users.noreply.github.com"
+          git add review
+          git commit -m "HANGAR_AD_03: CI stok aday inceleme kareleri" || exit 0
+          git push
