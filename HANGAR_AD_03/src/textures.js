@@ -130,33 +130,33 @@ export function drawEndcard(g, t, CUE, Wc = 1080, Hc = 1920) {
     g.save();
     g.strokeStyle = `rgba(120,118,114,${0.9 * la})`; g.lineWidth = 2;
     g.setLineDash([10, 8]);
-    g.strokeRect(Wc / 2 - 290, Hc / 2 - 190, 580, 170);
+    g.strokeRect(Wc / 2 - 330, Hc / 2 - 220, 660, 200);
     g.setLineDash([]);
     g.fillStyle = `rgba(150,147,142,${la})`;
     g.font = `400 26px "HangarSans", sans-serif`; spaced(9);
-    g.fillText('HANGAR LOGO', Wc / 2, Hc / 2 - 96);
+    g.fillText('HANGAR LOGO', Wc / 2, Hc / 2 - 112);
     g.font = `400 16px "HangarSans", sans-serif`; spaced(5);
     g.fillStyle = `rgba(110,108,104,${la})`;
-    g.fillText('PLACEHOLDER', Wc / 2, Hc / 2 - 64);
+    g.fillText('PLACEHOLDER', Wc / 2, Hc / 2 - 78);
     g.restore();
   }
   const pa = ease(CUE.place, 0.5);
   if (pa > 0) {
     g.save();
-    g.font = `700 50px "HangarSans", sans-serif`; spaced(20);
-    g.fillStyle = metal(Hc / 2 + 40, Hc / 2 + 90, pa);
-    g.fillText('GEMLİK • 2026', Wc / 2 + 10, Hc / 2 + 88);
+    g.font = `700 64px "HangarSans", sans-serif`; spaced(24);
+    g.fillStyle = metal(Hc / 2 + 40, Hc / 2 + 104, pa);
+    g.fillText('GEMLİK • 2026', Wc / 2 + 12, Hc / 2 + 100);
     // controlled red rule
     g.fillStyle = `rgba(170,24,18,${pa})`;
-    g.fillRect(Wc / 2 - 36, Hc / 2 + 126, 72 * Math.min(1, (t - CUE.place) / 0.4), 3);
+    g.fillRect(Wc / 2 - 44, Hc / 2 + 142, 88 * Math.min(1, (t - CUE.place) / 0.4), 4);
     g.restore();
   }
   const sa = ease(CUE.soon, 0.5);
   if (sa > 0) {
     g.save();
-    g.font = `400 32px "HangarSans", sans-serif`; spaced(16);
+    g.font = `400 40px "HangarSans", sans-serif`; spaced(20);
     g.fillStyle = `rgba(190,186,180,${0.8 * sa})`;
-    g.fillText('ÇOK YAKINDA', Wc / 2 + 8, Hc / 2 + 196);
+    g.fillText('ÇOK YAKINDA', Wc / 2 + 10, Hc / 2 + 224);
     g.restore();
   }
   spaced(0);

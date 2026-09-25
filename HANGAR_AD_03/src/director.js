@@ -87,7 +87,7 @@ function dash(t, insert) {
   const needleDeg = -135 + (clamp(needleRpm(t), -100, 8300) / 8000) * 270;
   const kmh = insert ? roadSpeed(t) * 3.6 : 0;
   const temp = t < CUE.clusterOn ? 0 : 20 + 55 * smooth(CUE.clusterOn, 7, t);
-  const redline = insert ? 0.7 + 0.3 * Math.sin(t * 70) : 0;
+  const redline = insert ? 0.35 + 0.2 * Math.sin(t * 70) : 0;
 
   const focus = Math.hypot(...cam.target.map((x, i) => x - pos[i]));
   const macro = t < CUE.lamps ? 1 : 0;
@@ -95,7 +95,7 @@ function dash(t, insert) {
     scene: 'dash', cam: { ...cam, pos },
     u: {
       uNeedle: deg(needleDeg), uSpeedNeedle: deg(-135 + (kmh / 240) * 270), uTempNeedle: deg(-90 + (temp / 120) * 180),
-      uBacklight: back * (insert ? 1.35 : 1), uRing: ring, uPress: press, uLamps: { fv: lamps.concat([0]).slice(0, 8) }, uToggles: { fv: toggles },
+      uBacklight: back * (insert ? 0.95 : 1), uRing: ring, uPress: press, uLamps: { fv: lamps.concat([0]).slice(0, 8) }, uToggles: { fv: toggles },
       uKey: 0.5 * smooth(CUE.rimOn + 0.2, 2.2, t) + 0.25 * smooth(CUE.fire, 3.4, t) * (insert ? 0.2 : 1),
       uRedRim: 0.9 * rim * (1 - 0.3 * crankSag) + (insert ? 0.8 : 0),
       uHaze: 0.2, uRedline: redline, uEnv: smooth(CUE.rimOn - 0.2, CUE.rimOn + 1.0, t),
@@ -184,7 +184,7 @@ function end(t) {
   const impact = t >= CUE.title && t < CUE.title + 0.1 ? Math.exp(-(t - CUE.title) / 0.03) : 0;
   return {
     scene: 'end', cam: { pos: [0, 0, -1], target: [0, 0, 0], fov: 1, roll: 0 }, u: {},
-    post: { focus: 1, aperture: 0, maxCoc: 1, exposure: 1.0, bloom: 0.55, threshold: 0.55, streak: 0.0, flash: impact * 0.25 },
+    post: { focus: 1, aperture: 0, maxCoc: 1, exposure: 1.0 + impact * 0.6, bloom: 0.55, threshold: 0.55, streak: 0.0, flash: 0 },
     subframes: 1,
   };
 }
