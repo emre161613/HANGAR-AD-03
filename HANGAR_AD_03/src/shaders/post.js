@@ -7,7 +7,13 @@ uniform vec2 uRes;
 
 export const ACCUM = HEAD + `
 uniform sampler2D uSrc; uniform float uWeight;
-void main(){ fragColor = texture(uSrc, gl_FragCoord.xy / uRes) * uWeight; }`;
+void main(){
+  vec4 c = texture(uSrc, gl_FragCoord.xy / uRes);
+  // sanitize: a single NaN/inf sample would otherwise bloom into a black block
+  if (any(isnan(c)) || any(isinf(c))) c = vec4(0.0, 0.0, 0.0, 60.0);
+  c.rgb = clamp(c.rgb, 0.0, 200.0);
+  fragColor = c * uWeight;
+}`;
 
 // gather DOF — circle of confusion from linear depth stored in alpha
 export const DOF = HEAD + `
