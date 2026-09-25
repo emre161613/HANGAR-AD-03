@@ -1,52 +1,52 @@
 # HANGAR_AD_03
 
-**Format:** 9:16 Instagram Reels, 1080×1920, 30 fps
-**Süre:** 19,5 sn
+**Format:** 9:16 Instagram Reels, 1080×1920, 30 fps, 19,5 sn, H.264 MP4
 **Çıktı:** `output/HANGAR_AD_03_v01.mp4`
 
-Bu film bir tesis tanıtımı değil, bir marka filmi. Konusu araba kültürü, gece sürüşü, garaj ruhu ve mekanik karakter.
+Tamamen kodla üretilmiş, programatik ve sinematik bir otomotiv reklam filmi. Stok video, stok fotoğraf ya da yapay zekâyla üretilmiş görsel **yoktur**. Her kare WebGL2 ile gerçek zamanlı 3D ışın yürütme (SDF raymarching ve analitik kesişimler) kullanılarak render edilir, her ses kodla sentezlenir.
 
-Başka hiçbir HANGAR projesine (HANGAR_TEASER_01–05 vb.) bağlı değildir, onlara dokunmaz.
+## Akış
 
-## Değişmez kurallar
-
-1. Hikâye sırası sabittir: karanlık → kontak/START → motorun uyanması → gerçek gösterge paneli → vites/pedal/direksiyon → gece yolculuğu → **YOLA ÇIKTIK.** → kısa karanlık → HANGAR → GEMLİK • 2026 → ÇOK YAKINDA.
-2. Otomobil görüntüleri **gerçek çekimdir**: ücretsiz, yasal stok ya da kendi çekimimiz. Bulunamayan bir sahne yapay grafikle doldurulmaz.
-3. Gösterge panelini sıfırdan kodla çizmek son tercihtir. Kod yalnızca gerçek görüntünün üstüne ışık, titreşim, motion blur, renk ve geçiş ekler.
-4. Kodun işi kesmek, kadrajlamak, renk vermek, film dokusu eklemek, sesi miksleyip kapanışı yazmaktır. Kodun kendisi görsel malzeme olmaz. Şunlar yok: fotoğraf slaytı, bölünmüş ekran, kart sistemi, web animasyonu, HUD/oyun arayüzü.
-5. Renk paleti siyah, fırçalanmış metal, koyu bordo ve kontrollü kırmızı/amber. Neon ya da cyberpunk yok.
-6. Logo kullanıcıdan gelir. O gelene kadar nötr bir placeholder kullanılır, yeni logo tasarlanmaz.
-7. Görsel yaklaşımda önemli bir değişiklik kullanıcı onayı olmadan yapılmaz.
+| Zaman | Sahne |
+|---|---|
+| 0,0 – 2,6 | Tam karanlık. START düğmesinin krom çerçevesine ışık yalar. Ağır bir basış ve mekanik klik, ardından marş motoru ve motorun ateşlenmesi. |
+| 2,6 – 3,4 | Panel uyanır: röle tıkları, ikaz lambaları, toggle anahtarlar. |
+| 3,4 – 7,2 | Gösterge paneli, kahraman devir saati. Arka ışık titreyerek yanar, ibre self-test turu atar, sesle senkron gaz vuruşları olur. Kamera çapraz açılar değiştirir ve göbeğe dalar. |
+| 7,2 – 10,0 | Mekanik dünya: kanallı H vites kapısı, N→1 vites geçişi, dönen dişli takımı, delikli gaz pedalı. Ortamda duman var. |
+| 10,0 – 14,2 | Gece sürüşü: asfalt seviyesinden kalkan kamera, ıslak asfalt, şeritler, sodyum lambalar, bariyer, kırmızı reflektörler, önde giden araçların stop lambaları, sollama, vites büyütme. |
+| 14,2 – 14,6 | Devir saati kırmızı bölgede, rev-limiter vuruşları. |
+| 14,6 | SERT KESME: siyah ekran ve sessizlik (yalnızca reverb kuyruğu). |
+| 15,0 – 16,4 | **YOLA ÇIKTIK.** ve bas darbesi. |
+| 16,4 – 17,0 | Karanlık ve sessizlik. |
+| 17,0 – 19,5 | HANGAR (logo **placeholder**), GEMLİK • 2026, ÇOK YAKINDA. |
 
 ## Yapı
 
 ```
-config/timeline.json   sahne/zaman çizelgesi, grade, kapanış, ses olayları (tek doğruluk kaynağı)
-config/assets.json     asset listesi: aday kaynaklar, lisans, durum (candidate/verified/gap/code)
-tools/build.mjs        tüm filmi tek bir ffmpeg filtergraph olarak kurar (npm bağımlılığı yok)
-assets/video/          V01…V10 klipleri   (git dışı — lisanslı stok)
-assets/audio/sfx|music ses efektleri / müzik (git dışı)
-assets/logo/           HANGAR_logo.png (kullanıcı yükleyecek)
-assets/fonts/          HEADLINE.ttf / SECONDARY.ttf (opsiyonel, yoksa Liberation Sans)
-docs/ASSET_PLAN.md     sahne bazında asset planı ve açık riskler
-output/                render çıktıları (git dışı)
+src/timeline.js     tek zaman kaynağı: işaret noktaları (cue), devir/gaz/hız eğrileri, ibre yay fiziği
+src/director.js     her t için kamera yolu, sarsıntılar, ışık/animasyon parametreleri
+src/shaders/        dash (panel), mech (vites/dişli/pedal), road (gece yolu), end (yazı), post
+src/textures.js     gösterge kadranları, START gravürü ve final tipografisi (Canvas2D → doku)
+src/main.js         render hattı: motion blur (alt-kare birikimi), DOF, bloom, ton eşleme, grain
+tools/render.mjs    headless Chromium ile kare render
+tools/audio.mjs     ses tasarımı: V8 ateşleme modeli, marş, klikler, vites, yol, darbe, müzik
+tools/sheet.mjs     test kareleri için kontak föy
+assets/fonts/       Liberation Sans (SIL OFL 1.1)
+render.json         değiştirildiğinde GitHub Actions final render alır
 ```
 
 ## Kullanım
 
 ```bash
-node tools/build.mjs check             # ortam + eksik asset raporu
-node tools/build.mjs plan --preview    # filtergraph'ı yaz (eksikler yazılı slate olur)
-node tools/build.mjs render --preview  # taslak render (HANGAR_AD_03_v01_PREVIEW.mp4)
-node tools/build.mjs render            # final — zorunlu asset eksikse REDDEDER
+node tools/render.mjs --frames 60,140,330 --out test_frames --scale 0.5 --sub 1   # hızlı test kareleri
+node tools/render.mjs --out output/frames --jpg                                    # tüm kareler
+node tools/audio.mjs output/audio.wav                                              # ses
+ffmpeg -framerate 30 -i output/frames/%04d.jpg -i output/audio.wav -c:v libx264 -crf 16 \
+  -pix_fmt yuv420p -af loudnorm=I=-14:TP=-1:LRA=11 -c:a aac -b:a 320k -movflags +faststart output/HANGAR_AD_03_v01.mp4
 ```
 
-Gereksinimler: Node 18 veya üstü, `libx264` + `aac` + `drawtext` destekli ffmpeg (`FFMPEG=/yol/ffmpeg` ile de gösterilebilir).
+Final render GitHub Actions'ta çalışır (`.github/workflows/hangar-ad-03.yml`). Kareler 8 paralel işte render edilir, ardından ses sentezlenir, H.264 + AAC olarak kodlanır ve MP4 bu dala commit edilir.
 
-## Render pipeline
+## Logo
 
-1. **Sahne kurgusu:** her klip `timeline.json`'daki giriş noktası ve süreyle kesilir. 9:16'ya kırpılır, kırpma noktası `crop.cx/cy` ile ayarlanır. İsteğe bağlı yavaş bir optik yaklaşma (`push`) eklenir. Geçişler otomotiv reklamı diliyle sert kesmedir.
-2. **Ortak renk düzenlemesi:** kontrast, siyahların ezilmesi, gölgede bordo, desatürasyon ve kırmızı halation. Vinyet eklenir.
-3. **Kapanış:** siyah zemin üzerinde "YOLA ÇIKTIK." sert gelir. Ardından kısa karanlık boşluk, logo, GEMLİK • 2026 ve ÇOK YAKINDA. Kapanışa renk düzenlemesi uygulanmaz.
-4. **Film dokusu:** tüm filme zamanla değişen grain uygulanır, sonunda siyaha kısa bir fade gelir.
-5. **Ses:** SFX veriyolu öndedir. Müzik SFX'e göre sidechain ducking alır. 14,5 sn'de sert kesme olur, geriye yalnızca bir reverb kuyruğu kalır. Loudness hedefi -14 LUFS, true peak -1 dBTP.
+`src/textures.js` içindeki `drawEndcard` fonksiyonu şu an nötr, kesik çizgili bir çerçeve ve "HANGAR LOGO / PLACEHOLDER" etiketi çiziyor. Gerçek logo `assets/logo/` klasörüne geldiğinde bu alanın yerine konacak.
