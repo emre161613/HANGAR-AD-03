@@ -1,0 +1,111 @@
+{
+  "project": "HANGAR_AD_03",
+  "output": "output/HANGAR_AD_03_v01.mp4",
+  "format": { "width": 1080, "height": 1920, "fps": 30, "sampleRate": 48000 },
+  "duration": 19.5,
+
+  "grade": {
+    "note": "Tüm çekimlere ortak uygulanır. Siyah + fırçalanmış metal + koyu bordo + kontrollü kırmızı/amber. Neon/cyberpunk renk kaymasına izin verilmez.",
+    "blackCrush": 0.06,
+    "contrast": 1.12,
+    "saturation": 0.78,
+    "shadowTint": [0.12, 0.0, 0.02],
+    "highlightTint": [0.02, 0.0, -0.04],
+    "halation": { "threshold": 0.72, "sigma": 22, "opacity": 0.32 },
+    "grain": { "strength": 9 },
+    "vignette": 0.55
+  },
+
+  "shots": [
+    { "id": "S00", "start": 0.0,  "end": 1.2,  "type": "black",
+      "note": "Tam siyah. Son 0.3 sn'de START ışığı (S01 klibinin ilk karesi) 0→%15 opaklıkla sızar." },
+
+    { "id": "S01", "start": 1.2,  "end": 2.4,  "type": "clip", "asset": "V01", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.04,
+      "note": "START düğmesi makro, parmak basar, halka yanar. Klik sesi basma karesine senkron." },
+
+    { "id": "S02", "start": 2.4,  "end": 4.0,  "type": "clip", "asset": "V02", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.03,
+      "note": "Gerçek gösterge paneli canlanır. Gerekirse kod SADECE arka ışık açılışı/flicker ekler." },
+
+    { "id": "S03", "start": 4.0,  "end": 5.5,  "type": "clip", "asset": "V03", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.05,
+      "note": "Devir ibresi makro. Rölanti titreşimi + 3500 d/d blip. Sallantı (camera shake) ses zarfına bağlı." },
+
+    { "id": "S04", "start": 5.5,  "end": 6.5,  "type": "clip", "asset": "V04", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.0,
+      "note": "El vites topuzunu kavrar ve takar. Vites sesi takma karesine senkron." },
+
+    { "id": "S05", "start": 6.5,  "end": 7.3,  "type": "clip", "asset": "V05", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.0,
+      "note": "Alçak açı, ayak gaza basar." },
+
+    { "id": "S06", "start": 7.3,  "end": 8.5,  "type": "clip", "asset": "V06", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.02,
+      "note": "Deri direksiyon + el, dışarıdan süzülen kırmızı ışık." },
+
+    { "id": "S07", "start": 8.5,  "end": 10.0, "type": "clip", "asset": "V07", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.7 }, "push": 0.0,
+      "note": "Islak asfalt, çok alçak açı, zemin akar." },
+
+    { "id": "S08", "start": 10.0, "end": 11.5, "type": "clip", "asset": "V08", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.02,
+      "note": "Stop lambası / kırmızı yansıma ıslak zeminde." },
+
+    { "id": "S09", "start": 11.5, "end": 13.0, "type": "clip", "asset": "V09", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.0,
+      "note": "Yağmurlu ön cam, arkada bokeh sokak ışıkları." },
+
+    { "id": "S10", "start": 13.0, "end": 14.5, "type": "clip", "asset": "V10", "in": 0.0,
+      "crop": { "cx": 0.5, "cy": 0.5 }, "push": 0.06, "speed": 1.25,
+      "note": "Tünel/sokak lambaları ritmik geçiş, hız. Tepe noktada kesilir." },
+
+    { "id": "S11", "start": 14.5, "end": 14.6, "type": "black",
+      "note": "Sert kesme. Ses de kesilir, yalnızca reverb kuyruğu." }
+  ],
+
+  "endcard": {
+    "font": "assets/fonts/HEADLINE.ttf",
+    "fontFallback": "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    "fontSecondary": "assets/fonts/SECONDARY.ttf",
+    "fontSecondaryFallback": "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+    "logo": "assets/logo/HANGAR_logo.png",
+    "color": "0xE8E6E1",
+    "items": [
+      { "id": "E1", "kind": "text", "text": "YOLA ÇIKTIK.", "start": 14.6, "end": 16.0, "size": 118, "y": 0.5,
+        "note": "Tek karede sert giriş (animasyon yok), 2 kare hafif ışık titreşimi, sert çıkış." },
+      { "id": "E2", "kind": "gap", "start": 16.0, "end": 16.6, "note": "Kısa karanlık boşluk." },
+      { "id": "E3", "kind": "logo", "start": 16.6, "end": 19.5, "y": 0.46, "width": 0.56, "fadeIn": 0.5,
+        "note": "Logo kontrollü açılır. Metal ışık süpürmesi ancak gerçek logo gelince değerlendirilir." },
+      { "id": "E4", "kind": "text", "text": "GEMLİK • 2026", "start": 17.4, "end": 19.5, "size": 40, "y": 0.555, "tracking": 0.35, "fadeIn": 0.35 },
+      { "id": "E5", "kind": "text", "text": "ÇOK YAKINDA", "start": 18.1, "end": 19.5, "size": 30, "y": 0.60, "tracking": 0.45, "fadeIn": 0.35, "opacity": 0.7 }
+    ],
+    "fadeOutAt": 19.1
+  },
+
+  "audio": {
+    "targetLUFS": -14,
+    "truePeak": -1.0,
+    "musicDuckDb": -9,
+    "note": "SFX öndedir. Müzik SFX veriyoluyla sidechain ducking yapılır. 14.5'te her şey kesilir, yalnızca reverb kuyruğu kalır.",
+    "events": [
+      { "id": "A00", "asset": "SFX_ROOM",   "at": 0.0,  "in": 0.0, "dur": 14.5, "gainDb": -24, "fadeIn": 0.6 },
+      { "id": "A01", "asset": "SFX_KEYS",   "at": 0.35, "in": 0.0, "dur": 0.8,  "gainDb": -16 },
+      { "id": "A02", "asset": "SFX_CLICK",  "at": 1.55, "in": 0.0, "dur": 0.4,  "gainDb": -3,  "syncTo": "S01 basma karesi" },
+      { "id": "A03", "asset": "SFX_START",  "at": 2.4,  "in": 0.0, "dur": 2.0,  "gainDb": -4,  "note": "Marş + motorun tutması" },
+      { "id": "A04", "asset": "SFX_IDLE",   "at": 4.0,  "in": 0.0, "dur": 4.5,  "gainDb": -8,  "fadeIn": 0.3 },
+      { "id": "A05", "asset": "SFX_REV",    "at": 4.6,  "in": 0.0, "dur": 1.2,  "gainDb": -5,  "syncTo": "S03 ibre blip" },
+      { "id": "A06", "asset": "SFX_GEAR",   "at": 5.95, "in": 0.0, "dur": 0.5,  "gainDb": -4,  "syncTo": "S04 takma karesi" },
+      { "id": "A07", "asset": "SFX_ROAD",   "at": 8.2,  "in": 0.0, "dur": 6.3,  "gainDb": -12, "fadeIn": 0.4 },
+      { "id": "A08", "asset": "SFX_WIPER",  "at": 11.9, "in": 0.0, "dur": 0.8,  "gainDb": -15 },
+      { "id": "A09", "asset": "SFX_DRIVE",  "at": 6.6,  "in": 0.0, "dur": 7.9,  "gainDb": -7,  "note": "Yükte motor + 13.0'dan itibaren devir tırmanışı" },
+      { "id": "A10", "asset": "SFX_SHIFTUP","at": 13.9, "in": 0.0, "dur": 0.4,  "gainDb": -6 },
+      { "id": "A11", "asset": "SFX_IMPACT", "at": 14.6, "in": 0.0, "dur": 2.5,  "gainDb": -2,  "note": "YOLA ÇIKTIK. darbesi" },
+      { "id": "A12", "asset": "SFX_TICK",   "at": 16.4, "in": 0.0, "dur": 3.1,  "gainDb": -16, "note": "Soğuyan egzoz tık-tık" }
+    ],
+    "music": { "asset": "MUSIC", "at": 4.0, "in": 0.0, "dur": 10.5, "gainDb": -14, "fadeIn": 0.2, "cutAt": 14.5,
+               "tail": { "at": 16.6, "dur": 2.9, "gainDb": -18, "fadeOut": 1.2 } },
+    "cutAt": 14.5,
+    "cutReverbTail": 0.9
+  }
+}

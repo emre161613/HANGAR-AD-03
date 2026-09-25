@@ -1,0 +1,8 @@
+output/*
+!output/.gitkeep
+assets/video/*
+!assets/video/.gitkeep
+assets/audio/sfx/*
+!assets/audio/sfx/.gitkeep
+assets/audio/music/*
+!assets/audio/music/.gitkeep
