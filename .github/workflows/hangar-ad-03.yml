@@ -1,0 +1,102 @@
+name: HANGAR_AD_03 render
+
+# Final render of the fully procedural film.
+# Triggered by changes to HANGAR_AD_03/render.json on this branch (or manually).
+on:
+  push:
+    branches: [claude/hangar-ad-02-film-rx63m4]
+    paths:
+      - HANGAR_AD_03/render.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hangar-ad-03-render
+  cancel-in-progress: true
+
+env:
+  PARTS: 8
+
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: true
+      matrix:
+        part: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Headless Chromium (Playwright)
+        run: |
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null
+          npm i playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+      - name: Render frames (part ${{ matrix.part }}/${{ env.PARTS }})
+        working-directory: HANGAR_AD_03
+        env:
+          PLAYWRIGHT_MODULE: /tmp/pw/node_modules/playwright/index.mjs
+        run: node tools/render.mjs --out output/frames --jpg --parts $PARTS --part ${{ matrix.part }} | tail -n 5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frames-${{ matrix.part }}
+          path: HANGAR_AD_03/output/frames
+          retention-days: 3
+          compression-level: 0
+
+  encode:
+    needs: frames
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null && ffmpeg -hide_banner -version | head -1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: frames-*
+          path: HANGAR_AD_03/output/frames
+          merge-multiple: true
+      - name: Sound design (synthesized)
+        working-directory: HANGAR_AD_03
+        run: node tools/audio.mjs output/audio.wav
+      - name: Encode H.264 MP4
+        working-directory: HANGAR_AD_03
+        run: |
+          ls output/frames | wc -l
+          test "$(ls output/frames/*.jpg | wc -l)" -eq 585
+          ffmpeg -hide_banner -y -framerate 30 -i output/frames/%04d.jpg -i output/audio.wav \
+            -map 0:v -map 1:a -c:v libx264 -preset slow -crf 18 -tune film -profile:v high -level 4.2 \
+            -pix_fmt yuv420p -r 30 -g 30 -bf 2 -color_primaries bt709 -color_trc bt709 -colorspace bt709 \
+            -af "loudnorm=I=-14:TP=-1.0:LRA=11" -c:a aac -b:a 320k -ar 48000 \
+            -movflags +faststart -shortest output/HANGAR_AD_03_v01.mp4
+          ffprobe -v error -show_entries format=duration,size,bit_rate -show_entries stream=codec_name,width,height,r_frame_rate -of compact output/HANGAR_AD_03_v01.mp4
+          SIZE=$(stat -c %s output/HANGAR_AD_03_v01.mp4); echo "size $SIZE"
+          if [ "$SIZE" -gt 95000000 ]; then
+            ffmpeg -hide_banner -y -i output/HANGAR_AD_03_v01.mp4 -c:v libx264 -preset slow -crf 20 -tune film -pix_fmt yuv420p -c:a copy -movflags +faststart output/tmp.mp4 && mv output/tmp.mp4 output/HANGAR_AD_03_v01.mp4
+          fi
+      - name: Review stills from the encoded film
+        working-directory: HANGAR_AD_03
+        run: |
+          mkdir -p review && rm -f review/*.jpg
+          for t in 0.8 1.6 2.7 3.5 4.4 5.2 6.2 6.95 7.6 8.2 8.9 9.5 10.3 11.0 11.8 12.5 13.3 14.0 14.4 15.3 17.2 18.6; do
+            ffmpeg -v error -y -ss $t -i output/HANGAR_AD_03_v01.mp4 -frames:v 1 -vf scale=540:-2 -q:v 3 review/final_$(printf '%05.2f' $t).jpg
+          done
+          ffmpeg -v error -y -i output/HANGAR_AD_03_v01.mp4 -filter_complex "[0:a]showwavespic=s=1600x240:colors=0xc0392b" -frames:v 1 review/waveform.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HANGAR_AD_03_v01
+          path: HANGAR_AD_03/output/HANGAR_AD_03_v01.mp4
+      - name: Commit film to branch
+        run: |
+          git config user.name "hangar-ci"
+          git config user.email "hangar-ci@users.noreply.github.com"
+          git add -f HANGAR_AD_03/output/HANGAR_AD_03_v01.mp4 HANGAR_AD_03/review
+          git commit -m "HANGAR_AD_03: final render HANGAR_AD_03_v01.mp4" || exit 0
+          git pull --rebase -q origin ${{ github.ref_name }} && git push
