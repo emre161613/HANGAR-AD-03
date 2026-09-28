@@ -1,0 +1,12 @@
+{
+  "name": "hangar-ad-03-studio",
+  "private": true,
+  "description": "HyperFrames ile motion graphic stüdyosu",
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "check": "bash scripts/check-frames.sh"
+  },
+  "devDependencies": {
+    "hyperframes": "latest"
+  }
+}
