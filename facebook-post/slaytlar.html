@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>3D Kompozit · örnek proje postu</title>
+<style>
+  :root {
+    --bg: #0A1420; --bg2: #0F1E2E; --ink: #F4F7FA; --muted: #9FB0C0; --cyan: #38C8F4;
+    --line: rgba(56, 200, 244, .28); --card: #FFFFFF;
+    --mavi: #2F5BD3; --yesil: #1E9A4F; --kirmizi: #D2312C; --sari: #E8B70E; --mor: #8E4FD0; --gri: #8A96A3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #222; font-family: Inter, sans-serif; color: var(--ink); }
+  .slide {
+    width: 1080px; height: 1350px; position: relative; overflow: hidden; padding: 64px 72px;
+    display: flex; flex-direction: column;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(56,200,244,.10), transparent 55%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.018) 0 7px, transparent 7px 14px),
+      repeating-linear-gradient(-45deg, rgba(0,0,0,.25) 0 7px, transparent 7px 14px),
+      linear-gradient(180deg, #0D1A28, #060B11);
+    margin-bottom: 40px;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+  .brand { font-family: "Inter Display"; font-weight: 800; font-size: 30px; letter-spacing: 1px; }
+  .brand b { color: var(--cyan); font-weight: 800; }
+  .count { font-weight: 600; font-size: 22px; color: var(--muted); letter-spacing: 2px; }
+  .count b { color: var(--cyan); }
+  .kicker { display: flex; align-items: center; gap: 16px; font-weight: 700; font-size: 22px; letter-spacing: 5px; color: var(--cyan); margin-bottom: 22px; }
+  .kicker::before { content: ""; width: 42px; height: 3px; background: var(--cyan); }
+  h1 { font-family: "Inter Display"; font-weight: 800; font-size: 74px; line-height: 1.04; letter-spacing: -1px; }
+  h1 em { font-style: normal; color: var(--cyan); }
+  h2 { font-family: "Inter Display"; font-weight: 800; font-size: 60px; line-height: 1.06; letter-spacing: -.5px; }
+  h2 em { font-style: normal; color: var(--cyan); }
+  .lead { font-size: 28px; line-height: 1.4; color: var(--muted); margin-top: 20px; }
+  .lead strong { color: var(--ink); font-weight: 600; }
+  .label { font-weight: 700; font-size: 17px; letter-spacing: 3px; color: var(--cyan); margin-bottom: 10px; }
+  .paper { background: var(--card); border-radius: 14px; padding: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  .paper img { display: block; width: 100%; }
+  .cap { font-size: 18px; color: var(--muted); margin-top: 10px; }
+  .render { border-radius: 12px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.5); border: 1px solid var(--line); }
+  .render img { display: block; width: 100%; }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 2px solid var(--line); font-size: 22px; color: var(--muted); }
+  .foot b { color: var(--ink); font-weight: 600; }
+  .swipe { color: var(--cyan); font-weight: 700; letter-spacing: 2px; }
+
+  /* 1 */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px; }
+  .stat { border: 1px solid var(--line); border-radius: 12px; padding: 18px 16px; background: rgba(56,200,244,.05); }
+  .stat .n { font-family: "Inter Display"; font-weight: 800; font-size: 50px; color: var(--ink); line-height: 1; }
+  .stat .t { font-size: 19px; color: var(--muted); margin-top: 8px; }
+  .flow { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 24px; }
+  .flow span.a { color: var(--cyan); }
+
+  /* 2 */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+  .step { display: grid; grid-template-columns: 64px 1fr 300px; gap: 22px; align-items: center; padding: 12px 14px 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(10,22,34,.7); }
+  .num { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--cyan); display: grid; place-items: center; font-family: "Inter Display"; font-weight: 800; font-size: 30px; color: var(--cyan); }
+  .step h3 { font-family: "Inter Display"; font-weight: 700; font-size: 31px; }
+  .step p { font-size: 21px; color: var(--muted); margin-top: 6px; line-height: 1.3; }
+  .thumb { height: 100px; border-radius: 10px; overflow: hidden; background: #fff; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* 3 */
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 30px; margin-top: 26px; font-size: 22px; color: var(--ink); }
+  .legend div { display: flex; align-items: center; gap: 14px; }
+  .legend i { width: 46px; height: 0; border-top: 4px solid; display: inline-block; flex: none; }
+  .legend i.dash { border-top-style: dashed; }
+  .legend i.dot { width: 18px; height: 18px; border: 0; border-radius: 50%; background: var(--ink); margin: 0 14px; }
+
+  /* 4 */
+  .checks { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
+  .checks div { display: flex; gap: 16px; font-size: 24px; line-height: 1.35; }
+  .checks div::before { content: ""; flex: none; width: 26px; height: 26px; margin-top: 3px; border-radius: 6px; background: var(--cyan) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%230A1420' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat; }
+
+  /* 5 */
+  .files { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+  .file { position: relative; border-radius: 14px; padding: 24px 22px 20px; border: 2px solid var(--line); background: rgba(56,200,244,.06); }
+  .file.main { border-color: var(--cyan); background: rgba(56,200,244,.13); }
+  .file .ext { font-family: "Inter Display"; font-weight: 800; font-size: 54px; line-height: 1; }
+  .file.main .ext { color: var(--cyan); }
+  .file .d { font-size: 20px; color: var(--muted); margin-top: 10px; line-height: 1.3; }
+  .cad { margin-top: 30px; border-radius: 14px; overflow: hidden; border: 1px solid #2A3A4C; box-shadow: 0 18px 40px rgba(0,0,0,.5); }
+  .cad .bar { background: #1B2633; padding: 12px 18px; font-size: 18px; color: #C9D6E2; display: flex; gap: 10px; align-items: center; }
+  .cad .bar i { width: 12px; height: 12px; border-radius: 50%; background: #3A4A5C; display: inline-block; }
+  .cad .bar span { margin-left: 10px; font-family: "DejaVu Sans Mono", monospace; }
+  .cad .bar em { margin-left: auto; font-style: normal; color: var(--cyan); }
+  .cad .body { background: #fff; padding: 14px; }
+  .cad .body img { display: block; width: 100%; }
+  .layers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; margin-top: 26px; }
+  .layer { display: flex; align-items: center; gap: 14px; font-size: 20px; }
+  .layer i { width: 40px; height: 0; border-top: 4px solid; flex: none; }
+  .layer i.dash { border-top-style: dashed; }
+  .layer code { font-family: "DejaVu Sans Mono", monospace; font-size: 18px; color: var(--ink); }
+  .layer span { color: var(--muted); }
+
+  /* 6 */
+  .chain { display: flex; flex-wrap: wrap; gap: 12px 10px; align-items: center; margin-top: 30px; }
+  .pill { padding: 12px 20px; border-radius: 999px; border: 2px solid var(--cyan); font-weight: 700; font-size: 22px; background: rgba(56,200,244,.08); }
+  .arrow { color: var(--cyan); font-size: 26px; font-weight: 700; }
+  .duo { display: grid; grid-template-columns: 470px 1fr; gap: 26px; margin-top: 34px; align-items: start; }
+  .services { display: flex; flex-direction: column; gap: 18px; }
+  .services div h4 { font-family: "Inter Display"; font-weight: 700; font-size: 26px; }
+  .services div p { font-size: 20px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+  .cta { margin-top: 30px; border-radius: 16px; padding: 28px 32px; background: linear-gradient(90deg, rgba(56,200,244,.20), rgba(56,200,244,.06)); border: 2px solid var(--cyan); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+  .cta h3 { font-family: "Inter Display"; font-weight: 800; font-size: 34px; line-height: 1.15; }
+  .cta p { font-size: 21px; color: var(--muted); margin-top: 6px; }
+  .btn { flex: none; background: var(--cyan); color: #06121C; font-weight: 800; font-size: 24px; padding: 18px 26px; border-radius: 12px; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Kapak -->
+<section class="slide" id="s1">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>1</b> / 6</div></div>
+  <div class="kicker">ÖRNEK PROJE · KOMPOZİT CEPHE BANDI</div>
+  <h1>Bir cephe projesini <em>nasıl teslim</em> ediyorum?</h1>
+  <p class="lead">3D tasarımdan CNC kesime kadar her adım <strong>tek bir üretim dosyasında</strong>. Gerçek bir projenin sayfaları:</p>
+
+  <div style="margin-top:36px">
+    <div class="label">3D RENDER · GÜNDÜZ</div>
+    <div class="render"><img src="img/render-gunduz.png"></div>
+  </div>
+  <div style="margin-top:26px">
+    <div class="label">AYDINLATMA RENDER · GECE</div>
+    <div class="render"><img src="img/render-gece.png"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">28</div><div class="t">panel</div></div>
+    <div class="stat"><div class="n">17</div><div class="t">kesim parçası</div></div>
+    <div class="stat"><div class="n">14</div><div class="t">tabaka</div></div>
+    <div class="stat"><div class="n">6692</div><div class="t">delik konumu</div></div>
+  </div>
+
+  <div class="foot">
+    <div class="flow">Tasarım <span class="a">→</span> Teknik çizim <span class="a">→</span> CNC dosyası</div>
+    <div class="swipe">KAYDIR →</div>
+  </div>
+</section>
+
+<!-- 2 · Süreç -->
+<section class="slide" id="s2">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>2</b> / 6</div></div>
+  <div class="kicker">SÜREÇ</div>
+  <h2>14 sayfalık üretim dosyası, <em>6 adımda</em></h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><h3>3D tasarım ve render</h3><p>Model, gündüz ve gece aydınlatma görünüşü</p></div><div class="thumb"><img src="img/render-gunduz.png"></div></div>
+    <div class="step"><div class="num">2</div><div><h3>Panel geometrisi</h3><p>Her nokta x · y · z olarak ölçülendirilmiş</p></div><div class="thumb"><img src="img/panel-tanim.png" style="object-position:0 40%"></div></div>
+    <div class="step"><div class="num">3</div><div><h3>Katlama açıları, yarıklar</h3><p>Dağ / vadi çizgileri derece derece</p></div><div class="thumb"><img src="img/acilim-u40t.png" style="object-position:20% 40%"></div></div>
+    <div class="step"><div class="num">4</div><div><h3>Tabaka yerleşimi</h3><p>17 parça, 14 tabakaya (1250 × 6000 mm)</p></div><div class="thumb"><img src="img/tabaka-ust.png" style="object-position:0 0"></div></div>
+    <div class="step"><div class="num">5</div><div><h3>Döşeme planı ve sırası</h3><p>Hangi parça, nereye, hangi sırayla</p></div><div class="thumb"><img src="img/doseme-plan.png" style="object-position:60% 100%"></div></div>
+    <div class="step"><div class="num">6</div><div><h3>CNC kesim dosyası</h3><p>Katmanlı DXF / DWG · ölçek 1:1 · mm</p></div><div class="thumb"><img src="img/acilim-u40.png" style="object-position:30% 50%"></div></div>
+  </div>
+  <div class="foot"><div>Her adım ayrı sayfa, hepsi <b>birbiriyle tutarlı</b></div><div class="swipe">KAYDIR →</div></div>
+</section>
+
+<!-- 3 · Panel detayı -->
+<section class="slide" id="s3">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>3</b> / 6</div></div>
+  <div class="kicker">DETAY</div>
+  <h2>Her panel <em>milimetrik</em> tanımlı</h2>
+  <p class="lead">Atölye ölçü sormadan keser, büker, monte eder.</p>
+
+  <div style="margin-top:30px" class="paper"><img src="img/panel-tanim.png"></div>
+  <div class="cap">Panel tanımı · kırım noktaları ve yandan kesit</div>
+
+  <div style="margin-top:24px" class="paper"><img src="img/acilim-u40t.png"></div>
+  <div class="cap">Açılım · katlama açıları, yarıklar, delik dizilimi, 2 cm kulak</div>
+
+  <div class="legend">
+    <div><i style="border-color:var(--mavi)"></i>Dağ katlama + açı</div>
+    <div><i class="dash" style="border-color:var(--yesil)"></i>Vadi katlama + açı</div>
+    <div><i style="border-color:var(--kirmizi)"></i>Kesim / yarık</div>
+    <div><i class="dot"></i>Delik Ø30 / 22 / 15 mm</div>
+  </div>
+  <div class="foot"><div>Nokta koordinatları <b>mm</b> cinsinden, her parça için tablo</div><div class="swipe">KAYDIR →</div></div>
+</section>
+
+<!-- 4 · Yerleşim ve montaj -->
+<section class="slide" id="s4">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>4</b> / 6</div></div>
+  <div class="kicker">ÜRETİM VE MONTAJ</div>
+  <h2>Kesimden montaja, <em>şansa</em> bırakılan hiçbir şey yok</h2>
+
+  <div style="margin-top:32px" class="label">TABAKA YERLEŞİMİ</div>
+  <div class="paper"><img src="img/tabaka-ust.png" style="height:262px;object-fit:contain"></div>
+
+  <div style="margin-top:26px" class="label">DÖŞEME PLANI · P1 → P28</div>
+  <div class="paper"><img src="img/doseme-plan.png" style="height:332px;object-fit:contain"></div>
+
+  <div class="checks">
+    <div>Parçalar tabakaya fire en az olacak şekilde yerleşir; her birinin üzerinde adı ve panel numarası yazılı</div>
+    <div>Montaj sırası kenar kenar tablo halinde</div>
+  </div>
+  <div class="foot"><div>Sahada <b>“bu nereye gidiyordu?”</b> sorusu yok</div><div class="swipe">KAYDIR →</div></div>
+</section>
+
+<!-- 5 · CNC dosyası -->
+<section class="slide" id="s5">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>5</b> / 6</div></div>
+  <div class="kicker">TESLİMAT</div>
+  <h2>Sadece görsel değil: <em>CNC'ye hazır</em> dosya</h2>
+  <p class="lead">Çizim doğrudan kesim makinesine gider. CNC router ve lazer CAM programları <strong>DXF / DWG</strong> dosyasını doğrudan açar.</p>
+
+  <div class="files">
+    <div class="file main"><div class="ext">.DXF</div><div class="d">CNC kesim dosyası<br>1:1 · mm · katmanlı</div></div>
+    <div class="file main"><div class="ext">.DWG</div><div class="d">AutoCAD çizimi<br>düzenlenebilir</div></div>
+    <div class="file"><div class="ext">.PDF</div><div class="d">Üretim föyü<br>ölçü, açı, sıra</div></div>
+  </div>
+
+  <div class="cad">
+    <div class="bar"><i></i><i></i><i></i><span>tabaka-01.dxf</span><em>1:1 · mm</em></div>
+    <div class="body"><img src="img/acilim-u40.png"></div>
+  </div>
+
+  <div class="layers">
+    <div class="layer"><i style="border-color:var(--kirmizi)"></i><code>KESIM</code><span>kontur, yarık</span></div>
+    <div class="layer"><i style="border-color:var(--sari)"></i><code>DELIK</code><span>Ø30 / 22 / 15</span></div>
+    <div class="layer"><i style="border-color:var(--mavi)"></i><code>DAG_KANAL</code><span>dağ katlama</span></div>
+    <div class="layer"><i class="dash" style="border-color:var(--yesil)"></i><code>VADI_KANAL</code><span>vadi katlama</span></div>
+    <div class="layer"><i class="dash" style="border-color:var(--mor)"></i><code>KULAK_KANAL</code><span>2 cm kulak</span></div>
+    <div class="layer"><i style="border-color:#E6EDF3"></i><code>YAZI</code><span>parça adı, açı</span></div>
+  </div>
+  <div class="foot"><div>Her tabaka <b>ayrı dosya</b> + hepsi <b>tek dosyada</b></div><div class="swipe">KAYDIR →</div></div>
+</section>
+
+<!-- 6 · Mimar + CTA -->
+<section class="slide" id="s6">
+  <div class="top"><div class="brand"><b>3D</b> KOMPOZİT</div><div class="count"><b>6</b> / 6</div></div>
+  <div class="kicker">MİMAR GÖZÜYLE</div>
+  <h2>Fikirden sahaya, <em>tüm süreç</em> tek elden</h2>
+  <p class="lead">Mimar olarak tasarlıyor, render alıyor, çiziyor ve üretime hazırlıyorum.</p>
+
+  <div class="chain">
+    <span class="pill">Konsept</span><span class="arrow">→</span>
+    <span class="pill">3D model</span><span class="arrow">→</span>
+    <span class="pill">Render</span><span class="arrow">→</span>
+    <span class="pill">Teknik çizim</span><span class="arrow">→</span>
+    <span class="pill">CNC dosyası</span><span class="arrow">→</span>
+    <span class="pill">Uygulama detayı</span>
+  </div>
+
+  <div class="duo">
+    <div>
+      <div class="paper"><img src="img/aydinlatma-kesit.png"></div>
+      <div class="cap">Aydınlatma kesiti · profil, LED, neon detayı</div>
+    </div>
+    <div class="services">
+      <div><h4>3D tasarım ve render</h4><p>Gündüz ve gece görünüşüyle, karar vermeden önce görün</p></div>
+      <div><h4>Teknik çizim ve detay</h4><p>Kesit, bağlantı, aydınlatma ve montaj detayları</p></div>
+      <div><h4>Üretim dosyası</h4><p>Açılım, katlama açıları, tabaka yerleşimi, montaj sırası</p></div>
+      <div><h4>CNC'ye hazır teslim</h4><p>DXF / DWG, doğrudan makineye</p></div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div><h3>Projeniz mi var?</h3><p>Kompozit üreticileri ve mimarlar için çizim desteği</p></div>
+    <div class="btn">Mesaj gönderin →</div>
+  </div>
+</section>
+
+</body>
+</html>
