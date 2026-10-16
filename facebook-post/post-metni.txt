@@ -1,18 +1,11 @@
 Bir cephe projesini nasıl teslim ediyorum? 👇
 
-Kompozit cephe bandı için hazırladığım 14 sayfalık üretim dosyasından sayfalar:
+Bu kompozit cephe bandında 3D tasarım ve render'dan başlayıp her panelin ölçüsünü, katlama açılarını, delik yerlerini, tabaka yerleşimini ve montaj sırasını tek bir üretim dosyasında topladım. Atölye ölçü sormadan keser, büker, monte eder.
 
-✅ 3D tasarım ve render (gündüz + gece aydınlatma görünüşü)
-✅ Panel geometrisi: her kırım noktası x · y · z ölçülü
-✅ Katlama açıları, yarıklar ve 6692 deliğin konumu
-✅ 17 parçanın 14 tabakaya (1250 × 6000) yerleşimi
-✅ Döşeme planı: hangi panel nereye, hangi sırayla
-✅ Aydınlatma kesiti ve uygulama detayları
+📐 Çizimleri sadece görsel olarak değil, CNC kesime hazır DXF / DWG dosyası olarak teslim ediyorum. Dosya doğrudan makineye girer.
 
-📐 Sadece görsel değil: tüm çizimleri CNC kesime hazır DXF / DWG formatında, katmanlara ayrılmış, 1:1 ölçekte teslim ediyorum. Dosya doğrudan CNC router veya lazerin CAM programına girer.
+🏛️ Mimar olarak tüm süreci yürütüyorum: 3D tasarım, render, teknik çizim ve CNC dosyası.
 
-🏛️ Mimar olarak süreci baştan sona yürütüyorum: konsept, 3D model, render, teknik çizim, CNC dosyası ve uygulama detayı.
+Projeniz varsa mesaj atın, birlikte çözelim.
 
-Kompozit üreticisiyseniz ya da aklınızda bir proje varsa mesaj atın, birlikte çözelim.
-
-#kompozit #cephe #cnc #dxf #dwg #teknikçizim #3dmodelleme #render #mimarlık #cephetasarımı #kompozitpanel #üretim
+#kompozit #cephe #cnc #dxf #dwg #teknikçizim #3dtasarım #render #mimarlık
