@@ -1,8 +1,12 @@
 """3D KOMPOZİT — Facebook profil resmi üreticisi.
 
-SVG üretir, Chromium (Playwright) ile PNG'ye çevirir:
+1) kaynak/Layer0_yuzey.obj içindeki kapalı profilden (cloud_deneme parçası)
+   orta çizgiyi çıkarır -> parca_profil.json
+2) Zemin + yazı katmanını SVG olarak yazar (parça WebGL ile üstüne çizilir).
+
     python3 branding/generate.py && node branding/render.mjs
 """
+import json
 import math
 from pathlib import Path
 
@@ -10,50 +14,28 @@ OUT = Path(__file__).parent
 W = 1080
 C = W / 2
 CYAN = "#38C8F4"
-CYAN_DIM = "#1F6F8C"
 WHITE = "#F4F7FA"
 
 
-def pts(points):
-    return " ".join(f"{x:.1f},{y:.1f}" for x, y in points)
+def centerline_from_obj(path):
+    """OBJ'deki kapalı dış hat 10 birim kalınlığında ince bir duvar.
+    Karşılıklı (dış/iç) noktaların orta noktası parçanın orta çizgisini verir.
+    Sıra: kısa ayak ucu -> eğik ayak -> radyüs -> üst yüzey -> dikey ayak ucu."""
+    v = [
+        tuple(map(float, ln.split()[1:3]))
+        for ln in path.read_text().splitlines()
+        if ln.startswith("v ")
+    ]
+    v = [None] + v  # OBJ indeksleri 1'den başlar
 
+    def mid(a, b):
+        return ((v[a][0] + v[b][0]) / 2, (v[a][1] + v[b][1]) / 2)
 
-def ply(cx, cy, a, t, angle, idx, strength):
-    """Tek bir izometrik kompozit katman (ply): üst yüz + iki yan yüz + elyaf taraması."""
-    b = a * math.tan(math.radians(30))
-    top = [(cx, cy - b), (cx + a, cy), (cx, cy + b), (cx - a, cy)]
-    left = [(cx - a, cy), (cx, cy + b), (cx, cy + b + t), (cx - a, cy + t)]
-    right = [(cx + a, cy), (cx, cy + b), (cx, cy + b + t), (cx + a, cy + t)]
-
-    # Elyaf yönleri izometrik düzlemde: 0° / 90° rombus kenarlarına paralel,
-    # +45° yatay, -45° dikey.
-    dirs = {0: (a, -b), 90: (a, b), 45: (1, 0), -45: (0, 1)}
-    dx, dy = dirs[angle]
-    n = math.hypot(dx, dy)
-    dx, dy = dx / n, dy / n
-    px, py = -dy, dx
-    lines = []
-    step = 13
-    for k in range(-40, 41):
-        ox, oy = cx + px * k * step, cy + py * k * step
-        L = 400
-        lines.append(
-            f'<line x1="{ox - dx * L:.1f}" y1="{oy - dy * L:.1f}" '
-            f'x2="{ox + dx * L:.1f}" y2="{oy + dy * L:.1f}"/>'
-        )
-
-    op = strength
-    return f"""
-  <g>
-    <clipPath id="clip{idx}"><polygon points="{pts(top)}"/></clipPath>
-    <polygon points="{pts(left)}" fill="url(#sideL)" stroke="{CYAN}" stroke-opacity="{op}" stroke-width="2.2" stroke-linejoin="round"/>
-    <polygon points="{pts(right)}" fill="url(#sideR)" stroke="{CYAN}" stroke-opacity="{op}" stroke-width="2.2" stroke-linejoin="round"/>
-    <polygon points="{pts(top)}" fill="url(#topFill)" fill-opacity="{0.55 + 0.45 * op:.2f}"/>
-    <g clip-path="url(#clip{idx})" stroke="{CYAN}" stroke-opacity="{0.30 * op + 0.08:.2f}" stroke-width="1.6">
-      {''.join(lines)}
-    </g>
-    <polygon points="{pts(top)}" fill="none" stroke="{CYAN}" stroke-opacity="{op}" stroke-width="2.6" stroke-linejoin="round"/>
-  </g>"""
+    pts = [mid(3, 4), mid(2, 5), mid(1, 6)]
+    pts += [mid(i, 65 - i) for i in range(7, 31)]  # radyüs: v7..v30 <-> v58..v35
+    pts += [mid(31, 34), mid(32, 33)]
+    thickness = math.dist(v[3], v[4])
+    return pts, thickness
 
 
 def dial(r_out):
@@ -79,41 +61,30 @@ def dial(r_out):
 
 
 def build(tagline: bool):
-    stack_cy = 330 if tagline else 345
-    a = 205
-    t = 17
-    gap = 46
-    orient = [-45, 90, 45, 0]  # alttan üste: klasik [0/45/90/-45] serimi
-    plies = "".join(
-        ply(C, stack_cy + gap * (3 - i), a, t, orient[i], i, 0.45 + 0.183 * i)
-        for i in range(4)
-    )
-
-    text_y = 728 if tagline else 748
-    title_size = 112 if tagline else 112
-    tag = (
-        f'<text x="{C}" y="{text_y + 76}" text-anchor="middle" '
-        f'font-family="Inter" font-weight="600" font-size="31" letter-spacing="7.5" fill="{CYAN}">'
-        f"TASARIM · ÇİZİM · MODELLEME</text>"
-        if tagline
-        else ""
-    )
-    # Başlığın altında ince ölçü çizgisi (teknik resim göndermesi)
-    dim_y = text_y + 30 if tagline else text_y + 42
-    dim_half = 300 if tagline else 300
-    dim = "" if tagline else f"""
+    text_y = 760 if tagline else 772
+    title_size = 106
+    if tagline:
+        under = (
+            f'<text x="{C}" y="{text_y + 70}" text-anchor="middle" '
+            f'font-family="Inter" font-weight="600" font-size="30" letter-spacing="7" fill="{CYAN}">'
+            f"TASARIM · ÇİZİM · MODELLEME</text>"
+        )
+    else:
+        # Başlığın altında ince ölçü çizgisi (teknik resim göndermesi)
+        y, h = text_y + 40, 290
+        under = f"""
   <g stroke="{CYAN}" stroke-width="2" stroke-opacity="0.75">
-    <line x1="{C - dim_half}" y1="{dim_y}" x2="{C + dim_half}" y2="{dim_y}"/>
-    <line x1="{C - dim_half}" y1="{dim_y - 14}" x2="{C - dim_half}" y2="{dim_y + 14}"/>
-    <line x1="{C + dim_half}" y1="{dim_y - 14}" x2="{C + dim_half}" y2="{dim_y + 14}"/>
+    <line x1="{C - h}" y1="{y}" x2="{C + h}" y2="{y}"/>
+    <line x1="{C - h}" y1="{y - 14}" x2="{C - h}" y2="{y + 14}"/>
+    <line x1="{C + h}" y1="{y - 14}" x2="{C + h}" y2="{y + 14}"/>
   </g>
-  <polygon points="{C - dim_half},{dim_y} {C - dim_half + 18},{dim_y - 6} {C - dim_half + 18},{dim_y + 6}" fill="{CYAN}"/>
-  <polygon points="{C + dim_half},{dim_y} {C + dim_half - 18},{dim_y - 6} {C + dim_half - 18},{dim_y + 6}" fill="{CYAN}"/>"""
+  <polygon points="{C - h},{y} {C - h + 18},{y - 6} {C - h + 18},{y + 6}" fill="{CYAN}"/>
+  <polygon points="{C + h},{y} {C + h - 18},{y - 6} {C + h - 18},{y + 6}" fill="{CYAN}"/>"""
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{W}" viewBox="0 0 {W} {W}">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
-      <stop offset="0" stop-color="#14263A"/>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="#16293D"/>
       <stop offset="0.55" stop-color="#0A1420"/>
       <stop offset="1" stop-color="#04080D"/>
     </radialGradient>
@@ -130,42 +101,41 @@ def build(tagline: bool):
       <rect x="0" y="14" width="14" height="14" fill="url(#weaveV)"/>
       <rect x="14" y="14" width="14" height="14" fill="url(#weaveH)"/>
     </pattern>
-    <radialGradient id="fade" cx="50%" cy="45%" r="55%">
+    <radialGradient id="fade" cx="50%" cy="42%" r="55%">
       <stop offset="0" stop-color="#000" stop-opacity="1"/>
       <stop offset="0.6" stop-color="#000" stop-opacity="0.85"/>
       <stop offset="1" stop-color="#000" stop-opacity="0.15"/>
     </radialGradient>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="{CYAN}" stop-opacity="0.22"/>
+      <stop offset="0" stop-color="{CYAN}" stop-opacity="0.20"/>
       <stop offset="1" stop-color="{CYAN}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="topFill" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#173149"/><stop offset="1" stop-color="#0C1A28"/>
-    </linearGradient>
-    <linearGradient id="sideL" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#0E2234"/><stop offset="1" stop-color="#16344D"/>
-    </linearGradient>
-    <linearGradient id="sideR" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#0B1A28"/><stop offset="1" stop-color="#081320"/>
-    </linearGradient>
+    <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#000" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
   <rect width="{W}" height="{W}" fill="url(#bg)"/>
   <rect width="{W}" height="{W}" fill="url(#carbon)" opacity="0.55"/>
   <rect width="{W}" height="{W}" fill="url(#fade)"/>
-  <ellipse cx="{C}" cy="{stack_cy + 90}" rx="330" ry="260" fill="url(#glow)"/>
+  <ellipse cx="{C}" cy="420" rx="360" ry="250" fill="url(#glow)"/>
+  <ellipse cx="560" cy="602" rx="330" ry="30" fill="url(#shadow)"/>
 
   {dial(500)}
-  {plies}
 
   <text x="{C}" y="{text_y}" text-anchor="middle" font-family="Inter Display" font-weight="800"
         font-size="{title_size}" letter-spacing="2" fill="{WHITE}"><tspan fill="{CYAN}">3D</tspan> KOMPOZİT</text>
-  {dim}
-  {tag}
+  {under}
 </svg>"""
 
 
 if __name__ == "__main__":
-    (OUT / "profil-3d-kompozit.svg").write_text(build(tagline=False), encoding="utf-8")
-    (OUT / "profil-3d-kompozit-slogan.svg").write_text(build(tagline=True), encoding="utf-8")
-    print("SVG'ler yazıldı.")
+    pts, t = centerline_from_obj(OUT / "kaynak" / "Layer0_yuzey.obj")
+    (OUT / "parca_profil.json").write_text(
+        json.dumps({"centerline": [[round(x, 3), round(y, 3)] for x, y in pts], "thickness": round(t, 3)}),
+        encoding="utf-8",
+    )
+    (OUT / "zemin.svg").write_text(build(tagline=False), encoding="utf-8")
+    (OUT / "zemin-slogan.svg").write_text(build(tagline=True), encoding="utf-8")
+    print(f"{len(pts)} orta çizgi noktası, gerçek kalınlık {t:.2f}. SVG'ler yazıldı.")
