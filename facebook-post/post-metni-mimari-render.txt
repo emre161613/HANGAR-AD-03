@@ -1,0 +1,11 @@
+Bir projeyi nasıl görselleştiriyorum? 👇
+
+Bu cephe projesinde tasarımı önce 3D olarak modelledim, gündüz ve gece aydınlatmasıyla render aldım. Böylece yapı daha uygulanmadan nasıl görüneceği netleşti, kararlar ekranda verildi.
+
+🏛️ Mimar olarak sadece güzel görsel üretmiyorum: modeli ölçülü kuruyorum, detayları çözüyorum, gerektiğinde teknik çizim ve uygulama dosyasına kadar götürüyorum.
+
+📐 Ne sunuyorum: 3D mimari modelleme, gündüz/gece render, cephe ve iç mekân görselleştirme, teknik çizim (DWG / DXF).
+
+Projenizi görselleştirmek isterseniz mesaj atın, birlikte çalışalım.
+
+#mimarlık #3dmodelleme #render #mimarigörselleştirme #cephetasarımı #içmimari #teknikçizim #mimar
