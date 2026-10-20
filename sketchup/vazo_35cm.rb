@@ -1,6 +1,6 @@
 # Halka (donut) vazo - 35 cm
 # SketchUp: Window > Ruby Console, bu dosyanin tamamini yapistir ve Enter'a bas.
-# Ya da: load "C:/yol/vazo_35cm.rb"
+# Ya da: load "C:/Users/Onur Girit/Desktop/vazo_35cm.rb"
 #
 # Eksenler: X = sag, Y = derinlik, Z = yukari. Olculer cm.
 

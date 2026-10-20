@@ -1,6 +1,6 @@
 # Damla vazo, delikli ve yelpaze desenli - 35 cm
 # SketchUp: Window > Ruby Console, sonra:
-#   load "C:/Users/kullanici/Desktop/vazo2_yelpaze_35cm.rb"
+#   load "C:/Users/Onur Girit/Desktop/vazo2_yelpaze_35cm.rb"
 #
 # Eksenler: X = sag, Y = derinlik (on yuz -Y), Z = yukari. Olculer cm.
 
