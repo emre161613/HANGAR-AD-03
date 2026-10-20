@@ -30,13 +30,15 @@ module DonutVase
   RIB_STEP  = 0.17   # cizgiler arasi (radyan, kesit uzerinde)
 
   # ---- Cozunurluk ----
-  N_THETA_RIB  = 220 # cizgili bolgede (daha sik)
-  N_THETA_REST = 60  # duz bolgede
-  N_PHI   = 200
+  N_THETA_RIB  = 170 # cizgili bolgede (daha sik)
+  N_THETA_REST = 50  # duz bolgede
+  N_PHI   = 160
   N_NECK  = 64
 
   def smooth(e0, e1, x)
-    t = ((x - e0) / (e1 - e0)).clamp(0.0, 1.0)
+    t = (x - e0) / (e1 - e0)
+    t = 0.0 if t < 0.0
+    t = 1.0 if t > 1.0
     t * t * (3 - 2 * t)
   end
 
@@ -169,6 +171,7 @@ module DonutVase
 
   def run
     model = Sketchup.active_model
+    puts "SketchUp #{Sketchup.version}, Ruby #{RUBY_VERSION} - vazo olusturuluyor, lutfen bekleyin..."
     model.start_operation('Halka Vazo', true)
     mat = model.materials['Vazo_Seramik'] || model.materials.add('Vazo_Seramik')
     mat.color = Sketchup::Color.new(234, 228, 216)
