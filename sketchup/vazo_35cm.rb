@@ -147,12 +147,14 @@ module DonutVase
   def build_mesh(ents, grid, wrap_rows, mat, name)
     rows = grid.size
     cols = grid[0].size
-    mesh = Geom::PolygonMesh.new(rows * cols, rows * cols)
+    mesh = Geom::PolygonMesh.new(rows * cols, rows * cols * 2)
     idx = grid.map { |row| row.map { |x, y, z| mesh.add_point(Geom::Point3d.new(x.cm, y.cm, z.cm)) } }
     quads(rows, cols, wrap_rows).each do |q|
       ids = q.map { |i, j| idx[i][j] }.uniq
       next if ids.size < 3
-      mesh.add_polygon(*ids)
+      # Duz olmayan dortgenleri SketchUp atliyor; ucgenlere bol
+      mesh.add_polygon(ids[0], ids[1], ids[2])
+      mesh.add_polygon(ids[0], ids[2], ids[3]) if ids.size == 4
     end
     grp = ents.add_group
     grp.name = name
