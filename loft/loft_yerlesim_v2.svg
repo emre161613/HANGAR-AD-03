@@ -45,11 +45,11 @@
 <text x="304.0" y="1024.0" font-size="11" fill="#8a93a0" text-anchor="middle" font-weight="normal" >MERDİVEN ÇIKIŞ / SAHANLIK</text>
 <text x="304.0" y="1054.0" font-size="10" fill="#8a93a0" text-anchor="middle" font-weight="normal" >(boş bırakıldı)</text>
 <rect x="610.0" y="150.0" width="20.0" height="300.0" stroke="#ff5a5a" fill="#ff5a5a" stroke-width="0.5" />
-<rect x="630.0" y="430.0" width="120.0" height="20.0" stroke="#ff5a5a" fill="#ff5a5a" stroke-width="0.5" />
-<rect x="900.0" y="430.0" width="30.0" height="20.0" stroke="#ff5a5a" fill="#ff5a5a" stroke-width="0.5" />
-<line x1="750.0" y1="440.0" x2="900.0" y2="440.0" stroke="#ff5a5a" stroke-width="1" stroke-dasharray="5 3"/>
-<rect x="634.0" y="434.0" width="116.0" height="12.0" stroke="#ff5a5a" fill="none" stroke-width="1" stroke-dasharray="4 3"/>
-<text x="824.0" y="474.0" font-size="9" fill="#ff5a5a" text-anchor="middle" font-weight="normal" >SÜRGÜLÜ KAPI 75</text>
+<rect x="630.0" y="430.0" width="20.0" height="20.0" stroke="#ff5a5a" fill="#ff5a5a" stroke-width="0.5" />
+<rect x="790.0" y="430.0" width="140.0" height="20.0" stroke="#ff5a5a" fill="#ff5a5a" stroke-width="0.5" />
+<line x1="650.0" y1="440.0" x2="790.0" y2="440.0" stroke="#ff5a5a" stroke-width="1" stroke-dasharray="5 3"/>
+<rect x="794.0" y="434.0" width="132.0" height="12.0" stroke="#ff5a5a" fill="none" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="720.0" y="474.0" font-size="9" fill="#ff5a5a" text-anchor="middle" font-weight="normal" >SÜRGÜLÜ KAPI 70</text>
 <line x1="610.0" y1="886.0" x2="930.0" y2="886.0" stroke="#5cc8ff" stroke-width="1.6" />
 <line x1="610.0" y1="896.0" x2="930.0" y2="896.0" stroke="#5cc8ff" stroke-width="1.6" />
 <text x="710.0" y="918.0" font-size="9" fill="#5cc8ff" text-anchor="middle" font-weight="normal" >cam korkuluk h:110</text>
@@ -74,18 +74,21 @@
 <path d="M646.0 178.0 L646.0 246.0 A34.0 34.0 0 0 0 714.0 246.0 L714.0 178.0" stroke="#e0a462" fill="none" stroke-width="1.4"/>
 <path d="M656.0 186.0 L656.0 242.0 A24.0 24.0 0 0 0 704.0 242.0 L704.0 186.0" stroke="#e0a462" fill="none" stroke-width="1"/>
 <text x="680.0" y="310.0" font-size="10" fill="#e8e8e8" text-anchor="middle" font-weight="normal" >WC</text>
-<rect x="630.0" y="326.0" width="90.0" height="100.0" stroke="#e0a462" fill="none" stroke-width="1.4" />
-<ellipse cx="672.0" cy="376.0" rx="26.0" ry="34.0" stroke="#e0a462" fill="none"/>
-<line x1="632.0" y1="330.0" x2="632.0" y2="422.0" stroke="#5cc8ff" stroke-width="2" />
-<text x="734.0" y="386.0" font-size="9" fill="#e8e8e8" text-anchor="start" font-weight="normal" >LAVABO</text>
+<rect x="840.0" y="334.0" width="90.0" height="96.0" stroke="#e0a462" fill="none" stroke-width="1.4" />
+<ellipse cx="882.0" cy="382.0" rx="30.0" ry="30.0" stroke="#e0a462" fill="none"/>
+<line x1="928.0" y1="338.0" x2="928.0" y2="426.0" stroke="#5cc8ff" stroke-width="2" />
+<text x="884.0" y="424.0" font-size="7" fill="#e8e8e8" text-anchor="middle" font-weight="normal" >LAVABO</text>
 <rect x="750.0" y="150.0" width="180.0" height="180.0" stroke="#e0a462" fill="none" stroke-width="1.4" />
-<line x1="750.0" y1="150.0" x2="750.0" y2="240.0" stroke="#5cc8ff" stroke-width="2" />
-<line x1="750.0" y1="330.0" x2="930.0" y2="330.0" stroke="#5cc8ff" stroke-width="2" />
+<line x1="750.0" y1="150.0" x2="750.0" y2="330.0" stroke="#5cc8ff" stroke-width="2" />
+<line x1="840.0" y1="330.0" x2="930.0" y2="330.0" stroke="#5cc8ff" stroke-width="2" />
 <line x1="766.0" y1="314.0" x2="914.0" y2="166.0" stroke="#e0a462" stroke-width="0.8" />
 <line x1="766.0" y1="166.0" x2="914.0" y2="314.0" stroke="#e0a462" stroke-width="0.8" />
 <rect x="832.0" y="232.0" width="16.0" height="16.0" stroke="#e0a462" fill="none" stroke-width="1" />
-<text x="840.0" y="358.0" font-size="10" fill="#e8e8e8" text-anchor="middle" font-weight="normal" >DUŞ 90x90</text>
-<text x="800.0" y="406.0" font-size="10" fill="#8a93a0" text-anchor="middle" font-weight="normal" >BANYO ~2.1 m²</text>
+<text x="840.0" y="194.0" font-size="10" fill="#e8e8e8" text-anchor="middle" font-weight="normal" >DUŞ 90x90</text>
+<text x="710.0" y="350.0" font-size="10" fill="#8a93a0" text-anchor="middle" font-weight="normal" >BANYO ~2.1 m²</text>
+<rect x="634.0" y="282.0" width="200.0" height="144.0" stroke="#7fe08a" fill="none" stroke-width="0.8" stroke-dasharray="3 3"/>
+<text x="710.0" y="390.0" font-size="9" fill="#7fe08a" text-anchor="middle" font-weight="normal" >serbest alan</text>
+<text x="710.0" y="414.0" font-size="9" fill="#7fe08a" text-anchor="middle" font-weight="normal" >klozet önü 75</text>
 <text x="780.0" y="560.0" font-size="13" fill="#e8e8e8" text-anchor="middle" font-weight="bold" >AÇIK SPA ALANI</text>
 <text x="780.0" y="592.0" font-size="10" fill="#8a93a0" text-anchor="middle" font-weight="normal" >(yatakla arada duvar yok)</text>
 <rect x="200.0" y="150.0" width="320.0" height="400.0" stroke="#e0a462" fill="none" stroke-width="1.6" />
@@ -169,7 +172,7 @@
 <text x="1090" y="515" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">   CAM KORKULUK → güvenlik var, görüş açık.</text>
 <text x="1090" y="534" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">4. WC + duş + lavabo sağ üst köşede küçük</text>
 <text x="1090" y="553" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">   kapalı banyoda; jakuzi ile aynı tesisat</text>
-<text x="1090" y="572" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">   hattında. Kapı sürgülü.</text>
+<text x="1090" y="572" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">   hattında. Klozet önü 75 cm serbest.</text>
 <text x="1090" y="591" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">5. P1 penceresinin önü boş, açık alanı</text>
 <text x="1090" y="610" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve">   aydınlatıyor. Merdiven çıkışı serbest.</text>
 <text x="1090" y="629" font-size="12" fill="#e8e8e8" font-weight="normal" xml:space="preserve"></text>

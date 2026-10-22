@@ -133,12 +133,12 @@ text(97, 452, "(boş bırakıldı)", 10, DIM)
 # ---------------------------------------------------------------- yeni bölme duvarları (10 cm)
 # sadece kapalı banyo (sağ üst) duvarlı; jakuzi tarafında duvar YOK
 rect(250, 0, 10, 150, NEW, NEW, 0.5)                  # yatak-banyo arası
-rect(260, 140, 60, 10, NEW, NEW, 0.5)                 # banyo alt duvarı (sol parça)
-rect(395, 140, 15, 10, NEW, NEW, 0.5)                 # banyo alt duvarı (sağ parça)
-# sürgülü kapı 75 — duvar içine (sola) kayar
-line(320, 145, 395, 145, NEW, 1, 'stroke-dasharray="5 3"')
-rect(262, 142, 58, 6, NEW, "none", 1, 'stroke-dasharray="4 3"')
-text(357, 162, "SÜRGÜLÜ KAPI 75", 9, NEW)
+rect(260, 140, 10, 10, NEW, NEW, 0.5)                 # banyo alt duvarı (sol parça)
+rect(340, 140, 70, 10, NEW, NEW, 0.5)                 # banyo alt duvarı (sağ parça, kapı cebi)
+# sürgülü kapı 70 — duvar içine (sağa) kayar
+line(270, 145, 340, 145, NEW, 1, 'stroke-dasharray="5 3"')
+rect(342, 142, 66, 6, NEW, "none", 1, 'stroke-dasharray="4 3"')
+text(305, 162, "SÜRGÜLÜ KAPI 70", 9, NEW)
 
 # merdiven boşluğu kenarı: CAM KORKULUK (duvar değil, görüş kesilmez)
 line(250, 368, W, 368, GLASS, 1.6)
@@ -172,20 +172,23 @@ out.append(f'<path d="M{X(268)} {Y(14)} L{X(268)} {Y(48)} A{p(17)} {p(17)} 0 0 0
 out.append(f'<path d="M{X(273)} {Y(18)} L{X(273)} {Y(46)} A{p(12)} {p(12)} 0 0 0 {X(297)} {Y(46)} '
            f'L{X(297)} {Y(18)}" stroke="{FURN}" fill="none" stroke-width="1"/>')
 text(285, 80, "WC", 10, TXT)
-# lavabo 60x45 — sol duvarda
-rect(260, 88, 45, 50)
-out.append(f'<ellipse cx="{X(281)}" cy="{Y(113)}" rx="{p(13)}" ry="{p(17)}" stroke="{FURN}" fill="none"/>')
-line(261, 90, 261, 136, GLASS, 2)  # ayna
-text(312, 118, "LAVABO", 9, TXT, anchor="start")
+# lavabo 45x45 — sağ duvarda, duşun altında (klozet önü serbest kalır)
+rect(365, 92, 45, 48)
+out.append(f'<ellipse cx="{X(386)}" cy="{Y(116)}" rx="{p(15)}" ry="{p(15)}" stroke="{FURN}" fill="none"/>')
+line(409, 94, 409, 138, GLASS, 2)  # ayna
+text(387, 137, "LAVABO", 7, TXT)
 # duş 90x90 — sağ üst köşe
 rect(320, 0, 90, 90)
-line(320, 0, 320, 45, GLASS, 2)
-line(320, 90, 410, 90, GLASS, 2)
+line(320, 0, 320, 90, GLASS, 2)       # sabit cam
+line(365, 90, 410, 90, GLASS, 2)      # giriş 320-365 arası
 line(328, 82, 402, 8, FURN, 0.8)
 line(328, 8, 402, 82, FURN, 0.8)
 rect(361, 41, 8, 8, FURN, "none", 1)
-text(365, 104, "DUŞ 90x90", 10, TXT)
-text(345, 128, "BANYO ~2.1 m²", 10, DIM)
+text(365, 22, "DUŞ 90x90", 10, TXT)
+text(300, 100, "BANYO ~2.1 m²", 10, DIM)
+rect(262, 66, 100, 72, "#7fe08a", "none", 0.8, 'stroke-dasharray="3 3"')
+text(300, 120, "serbest alan", 9, "#7fe08a")
+text(300, 132, "klozet önü 75", 9, "#7fe08a")
 
 # açık alan etiketi
 text(335, 205, "AÇIK SPA ALANI", 13, TXT, weight="bold")
@@ -264,7 +267,7 @@ notes = [
     "   CAM KORKULUK → güvenlik var, görüş açık.",
     "4. WC + duş + lavabo sağ üst köşede küçük",
     "   kapalı banyoda; jakuzi ile aynı tesisat",
-    "   hattında. Kapı sürgülü.",
+    "   hattında. Klozet önü 75 cm serbest.",
     "5. P1 penceresinin önü boş, açık alanı",
     "   aydınlatıyor. Merdiven çıkışı serbest.",
     "",
